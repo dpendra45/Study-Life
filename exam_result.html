@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Result Declaration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .search-section {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .search-box {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        input[type="text"], input[type="password"] {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 200px;
+        }
+        
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background-color: #0056b3;
+        }
+        
+        .result-display {
+            display: none;
+            margin-top: 20px;
+        }
+        
+        .student-info {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        
+        .grades {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .grade-item {
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 4px;
+            text-align: center;
+        }
+        
+        .total {
+            background-color: #d4edda;
+            padding: 15px;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .admin-panel {
+            margin-top: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        input[type="number"] {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 100%;
+        }
+        
+        .error {
+            color: red;
+            margin-top: 10px;
+        }
+        
+        .success {
+            color: green;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Exam Result Declaration System</h1>
+        
+        <!-- Student Section -->
+        <div class="search-section">
+            <h2>Student Result</h2>
+            <div class="search-box">
+                <input type="text" id="rollNumber" placeholder="Enter Roll Number">
+                <button onclick="searchResult()">Search Result</button>
+            </div>
+        </div>
+        
+        <div id="resultDisplay" class="result-display">
+            <div class="student-info">
+                <h3>Student Information</h3>
+                <p><strong>Name:</strong> <span id="studentName"></span></p>
+                <p><strong>Roll Number:</strong> <span id="displayRollNumber"></span></p>
+                <p><strong>Class:</strong> <span id="studentClass"></span></p>
+                <p><strong>Exam:</strong> <span id="examType"></span></p>
+            </div>
+            
+            <div class="grades">
+                <div class="grade-item">
+                    <h4>Mathematics</h4>
+                    <p>Marks: <span id="mathMarks"></span></p>
+                </div>
+                <div class="grade-item">
+                    <h4>Science</h4>
+                    <p>Marks: <span id="scienceMarks"></span></p>
+                </div>
+                <div class="grade-item">
+                    <h4>English</h4>
+                    <p>Marks: <span id="englishMarks"></span></p>
+                </div>
+                <div class="grade-item">
+                    <h4>Social Studies</h4>
+                    <p>Marks: <span id="socialMarks"></span></p>
+                </div>
+            </div>
+            
+            <div class="total">
+                <p><strong>Total Marks:</strong> <span id="totalMarks"></span> / 400</p>
+                <p><strong>Percentage:</strong> <span id="percentage"></span>%</p>
+                <p><strong>Grade:</strong> <span id="grade"></span></p>
+            </div>
+        </div>
+        
+        <div id="errorMessage" class="error"></div>
+        
+        <!-- Admin Panel -->
+        <div class="admin-panel">
+            <h2>Admin Panel</h2>
+            <div class="form-group">
+                <label for="adminUsername">Username:</label>
+                <input type="text" id="adminUsername" placeholder="Admin Username">
+            </div>
+            <div class="form-group">
+                <label for="adminPassword">Password:</label>
+                <input type="password" id="adminPassword" placeholder="Admin Password">
+            </div>
+            <button onclick="showAdminForm()">Login as Admin</button>
+            
+            <div id="adminForm" style="display: none; margin-top: 20px;">
+                <h3>Enter Student Result</h3>
+                <div class="form-group">
+                    <label for="newRollNumber">Roll Number:</label>
+                    <input type="text" id="newRollNumber">
+                </div>
+                <div class="form-group">
+                    <label for="newStudentName">Student Name:</label>
+                    <input type="text" id="newStudentName">
+                </div>
+                <div class="form-group">
+                    <label for="newClass">Class:</label>
+                    <input type="text" id="newClass">
+                </div>
+                <div class="form-group">
+                    <label for="newExamType">Exam Type:</label>
+                    <input type="text" id="newExamType">
+                </div>
+                <div class="form-group">
+                    <label for="newMathMarks">Mathematics Marks:</label>
+                    <input type="number" id="newMathMarks" min="0" max="100">
+                </div>
+                <div class="form-group">
+                    <label for="newScienceMarks">Science Marks:</label>
+                    <input type="number" id="newScienceMarks" min="0" max="100">
+                </div>
+                <div class="form-group">
+                    <label for="newEnglishMarks">English Marks:</label>
+                    <input type="number" id="newEnglishMarks" min="0" max="100">
+                </div>
+                <div class="form-group">
+                    <label for="newSocialMarks">Social Studies Marks:</label>
+                    <input type="number" id="newSocialMarks" min="0" max="100">
+                </div>
+                <button onclick="saveResult()">Save Result</button>
+            </div>
+            
+            <div id="adminMessage"></div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data storage (in a real app, this would be a database)
+        let resultsData = [
+            {
+                rollNumber: "101",
+                name: "John Doe",
+                class: "10th Grade",
+                exam: "Final Exam 2025",
+                math: 85,
+                science: 92,
+                english: 78,
+                social: 88
+            },
+            {
+                rollNumber: "102",
+                name: "Jane Smith",
+                class: "10th Grade",
+                exam: "Final Exam 2025",
+                math: 95,
+                science: 87,
+                english: 90,
+                social: 85
+            }
+        ];
+
+        function searchResult() {
+            const rollNumber = document.getElementById('rollNumber').value.trim();
+            
+            if (!rollNumber) {
+                showError('Please enter a roll number');
+                return;
+            }
+            
+            const result = resultsData.find(item => item.rollNumber === rollNumber);
+            
+            if (result) {
+                displayResult(result);
+                hideError();
+            } else {
+                showError('No result found for this roll number');
+            }
+        }
+
+        function displayResult(result) {
+            document.getElementById('studentName').textContent = result.name;
+            document.getElementById('displayRollNumber').textContent = result.rollNumber;
+            document.getElementById('studentClass').textContent = result.class;
+            document.getElementById('examType').textContent = result.exam;
+            document.getElementById('mathMarks').textContent = result.math;
+            document.getElementById('scienceMarks').textContent = result.science;
+            document.getElementById('englishMarks').textContent = result.english;
+            document.getElementById('socialMarks').textContent = result.social;
+            
+            const total = result.math + result.science + result.english + result.social;
+            const percentage = (total / 400) * 100;
+            let grade = '';
+            
+            if (percentage >= 90) grade = 'A+';
+            else if (percentage >= 80) grade = 'A';
+            else if (percentage >= 70) grade = 'B';
+            else if (percentage >= 60) grade = 'C';
+            else if (percentage >= 50) grade = 'D';
+            else grade = 'F';
+            
+            document.getElementById('totalMarks').textContent = total;
+            document.getElementById('percentage').textContent = percentage.toFixed(2);
+            document.getElementById('grade').textContent = grade;
+            
+            document.getElementById('resultDisplay').style.display = 'block';
+        }
+
+        function showError(message) {
+            document.getElementById('errorMessage').textContent = message;
+        }
+
+        function hideError() {
+            document.getElementById('errorMessage').textContent = '';
+        }
+
+        function showAdminForm() {
+            const username = document.getElementById('adminUsername').value;
+            const password = document.getElementById('adminPassword').value;
+            
+            // Simple admin authentication (in a real app, use proper authentication)
+            if (username === 'admin' && password === 'password') {
+                document.getElementById('adminForm').style.display = 'block';
+                document.getElementById('adminMessage').textContent = '';
+            } else {
+                document.getElementById('adminMessage').innerHTML = '<div class="error">Invalid credentials</div>';
+            }
+        }
+
+        function saveResult() {
+            const newRollNumber = document.getElementById('newRollNumber').value.trim();
+            const newStudentName = document.getElementById('newStudentName').value.trim();
+            const newClass = document.getElementById('newClass').value.trim();
+            const newExamType = document.getElementById('newExamType').value.trim();
+            const newMathMarks = parseInt(document.getElementById('newMathMarks').value);
+            const newScienceMarks = parseInt(document.getElementById('newScienceMarks').value);
+            const newEnglishMarks = parseInt(document.getElementById('newEnglishMarks').value);
+            const newSocialMarks = parseInt(document.getElementById('newSocialMarks').value);
+            
+            // Validation
+            if (!newRollNumber || !newStudentName || !newClass || !newExamType) {
+                document.getElementById('adminMessage').innerHTML = '<div class="error">Please fill all required fields</div>';
+                return;
+            }
+            
+            if (isNaN(newMathMarks) || isNaN(newScienceMarks) || isNaN(newEnglishMarks) || isNaN(newSocialMarks)) {
+                document.getElementById('adminMessage').innerHTML = '<div class="error">Please enter valid marks for all subjects</div>';
+                return;
+            }
+            
+            if (newMathMarks < 0 || newMathMarks > 100 || 
+                newScienceMarks < 0 || newScienceMarks > 100 || 
+                newEnglishMarks < 0 || newEnglishMarks > 100 || 
+                newSocialMarks < 0 || newSocialMarks > 100) {
+                document.getElementById('adminMessage').innerHTML = '<div class="error">Marks should be between 0 and 100</div>';
+                return;
+            }
+            
+            // Check if roll number already exists
+            if (resultsData.some(item => item.rollNumber === newRollNumber)) {
+                document.getElementById('adminMessage').innerHTML = '<div class="error">Roll number already exists</div>';
+                return;
+            }
+            
+            // Add new result
+            const newResult = {
+                rollNumber: newRollNumber,
+                name: newStudentName,
+                class: newClass,
+                exam: newExamType,
+                math: newMathMarks,
+                science: newScienceMarks,
+                english: newEnglishMarks,
+                social: newSocialMarks
+            };
+            
+            resultsData.push(newResult);
+            
+            document.getElementById('adminMessage').innerHTML = '<div class="success">Result saved successfully!</div>';
+            
+            // Clear form
+            document.getElementById('newRollNumber').value = '';
+            document.getElementById('newStudentName').value = '';
+            document.getElementById('newClass').value = '';
+            document.getElementById('newExamType').value = '';
+            document.getElementById('newMathMarks').value = '';
+            document.getElementById('newScienceMarks').value = '';
+            document.getElementById('newEnglishMarks').value = '';
+            document.getElementById('newSocialMarks').value = '';
+        }
+
+        // Allow Enter key to trigger search
+        document.getElementById('rollNumber').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchResult();
+            }
+        });
+    </script>
+</body>
+</html>
